@@ -1,0 +1,20 @@
+i translated a persian dictionary file (a word per line) with a python script,
+saved result to out.json, like {'persian word':'eng translation', ...} pairs
+but some translations i get is not really meaning of persian words, they just transliterated.
+write a python script to check input json file(input=sys.argv[1])
+and Find transliterated Persian words in that JSON file.
+Detects entries where the "translation" is just the English phonetic spelling
+of the Persian word rather than an actual translation.
+output: 1.transliterated.json 
+        2. cleaned.json -> cleaned is orig json file that transliterated pairs removed from it.
+- use pathlib 
+- use parallel processing with mp.pool.map with 8 workers to speedup (input is about 8mb use mmap for reading)
+- examples:
+  "آبازه": "Abaze"
+  "آباسکوی": "Abascoy"
+  "آباکو": "Abaco",
+  "آبایف": "Abayev"
+  "آبایوبا": "Abayoba"
+  "آبتز": "Abtes"
+
+

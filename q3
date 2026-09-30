@@ -1,0 +1,32 @@
+i translated a english dictionary file (a word per line) with a python script,
+saved result to out.json, like {'english word':'persian translation', ...} pairs
+but some translations i get is not really meaning of english words, they just transliterated.
+write a python script to check input json file(input=sys.argv[1])
+and Find transliterated  words in that JSON file.
+Detects entries where the "translation" is just the  persian phonetic spelling
+of the orig word rather than an actual translation.
+output should be these 2 files: 1. transliterated.json 
+        2. cleaned.json -> cleaned is orig json file that transliterated pairs removed from it.
+- use pathlib 
+
+consider posibility of english words may be : 
+1. Programming/technical abbreviations (xor, regex, ioctl, stdio, etc.) 
+2. Brand names (MongoDB, GitHub, Verizon, etc.) - these typically don't translate
+3. Proper nouns/names (Cowper, Averroes, Birdseye, etc.)
+4. Roman numerals (xxxiv, lvi, etc.)
+5. Abbreviations (Mgr, Comdr, Pvt, etc.)
+input=sys.argv[1]
+example trsnslitetated words:
+{
+  "Anseres": ["غازسانان"],
+  "Buxaceae": ["بوکساسه"],
+  "Cyclostomata": ["گرددهانان"],
+  "Eupomatia": ["یوپوماتیا"],
+  "Eupomatiaceae": ["یوپوماتیاسه"],
+  "Knapper": ["کناپپهر"],
+  "Os": ["او اس"],
+  "Overlander": ["ووهرلاندهر"]
+  "zygon": ["زیگون"],
+  "Zygopteraceae": ["زیگوپتراسه"],
+  "zyme": ["زیم"],
+  "zythem": ["زیتم"]
