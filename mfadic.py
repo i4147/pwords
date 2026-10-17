@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/home/.local/bin/python
+#!/data/data/com.termux/usr/bin/python3.12
 from __future__ import annotations
 
 import json
