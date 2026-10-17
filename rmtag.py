@@ -4,6 +4,7 @@ from pathlib import Path
 
 TAG_RE = re.compile(r"\s*\([^)]*\)\s*")
 
+
 def main():
     path = Path.cwd() / "merged.json"
     if not path.exists():

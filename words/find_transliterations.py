@@ -990,11 +990,7 @@ def is_transliteration(persian_word, english_word):
         r"^[A-Z][a-z]*ar$",
         r"^[A-Z][a-z]*ad$",
     ]
-    pattern_matches = sum(
-        1
-        for pattern in transliteration_patterns
-        if re.match(pattern, english_word, re.IGNORECASE)
-    )
+    pattern_matches = sum(1 for pattern in transliteration_patterns if re.match(pattern, english_word, re.IGNORECASE))
     if pattern_matches >= 1:
         return True
     if english_word[0].isupper() and english_word[1:].islower():
@@ -1058,9 +1054,7 @@ def save_json_file(data, filepath):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Find transliterated Persian words in dictionary JSON"
-    )
+    parser = argparse.ArgumentParser(description="Find transliterated Persian words in dictionary JSON")
     parser.add_argument(
         "input_file",
         nargs="?",
@@ -1109,14 +1103,10 @@ def main():
                 break
     print(f"Remaining valid translations: {len(valid_translations)}")
     if args.move:
-        print(
-            f"\nMoving {len(transliterations)} transliterations to '{args.errors_file}'..."
-        )
+        print(f"\nMoving {len(transliterations)} transliterations to '{args.errors_file}'...")
         save_json_file(transliterations, args.errors_file)
         output_file = args.output if args.output else args.input_file
-        print(
-            f"Saving {len(valid_translations)} valid translations to '{output_file}'..."
-        )
+        print(f"Saving {len(valid_translations)} valid translations to '{output_file}'...")
         save_json_file(valid_translations, output_file)
         print("Done!")
     else:

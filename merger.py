@@ -2,13 +2,11 @@ import json
 from pathlib import Path
 from collections import defaultdict
 
+
 def main():
     current_dir = Path.cwd()
     merged = defaultdict(list)
-    json_files = [
-        f for f in current_dir.glob("*.json")
-        if f.name != "merged.json"
-    ]
+    json_files = [f for f in current_dir.glob("*.json") if f.name != "merged.json"]
 
     if not json_files:
         print("No JSON files found to merge.")

@@ -121,10 +121,7 @@ def is_transliteration(persian_word, translation):
     persian_chars = set("اآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیي ")
     if (
         all(c in persian_chars or c in " -" for c in persian_norm)
-        and (
-            all(c not in persian_chars for c in trans_norm)
-            and len(trans_norm) < len(persian_norm) * 2
-        )
+        and (all(c not in persian_chars for c in trans_norm) and len(trans_norm) < len(persian_norm) * 2)
         and re.match(r"^[a-z\s\'-]+$", trans_norm)
     ):
         common_english = {

@@ -41,4 +41,3 @@ if __name__ == "__main__":
     filename = sys.argv[1]
 
     convert_first_space_in_quotes(filename, start_line=135)
-

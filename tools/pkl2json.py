@@ -4,10 +4,11 @@ import json
 import glob
 from pathlib import Path
 
+
 def load_pkl_file(filepath):
     """Load a pickle file and return the DataFrame."""
     try:
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             data = pickle.load(f)
 
         if not isinstance(data, pd.DataFrame):

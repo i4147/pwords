@@ -8,9 +8,7 @@ import sys
 from pathlib import Path
 
 
-def detect_transliteration(
-    text: str, source_lang: str = "en", target_lang: str = "fa"
-) -> bool:
+def detect_transliteration(text: str, source_lang: str = "en", target_lang: str = "fa") -> bool:
     if not text or not isinstance(text, str):
         return False
     text = text.strip().lower()
@@ -107,9 +105,7 @@ def separate_transliterated_words(
                 else:
                     non_transliterated[key] = value
             elif isinstance(value, (list, dict)):
-                sub_translit, sub_non_translit = separate_transliterated_words(
-                    value, source_lang, target_lang
-                )
+                sub_translit, sub_non_translit = separate_transliterated_words(value, source_lang, target_lang)
                 if sub_translit:
                     transliterated[key] = sub_translit
                 if sub_non_translit:
@@ -127,9 +123,7 @@ def separate_transliterated_words(
                 else:
                     non_transliterated_list.append(item)
             elif isinstance(item, (list, dict)):
-                sub_translit, sub_non_translit = separate_transliterated_words(
-                    item, source_lang, target_lang
-                )
+                sub_translit, sub_non_translit = separate_transliterated_words(item, source_lang, target_lang)
                 if sub_translit:
                     transliterated_list.append(sub_translit)
                 if sub_non_translit:
@@ -140,9 +134,7 @@ def separate_transliterated_words(
     return transliterated, non_transliterated
 
 
-def process_dictionary_file(
-    input_file: Path, source_lang: str = "en", target_lang: str = "fa"
-) -> None:
+def process_dictionary_file(input_file: Path, source_lang: str = "en", target_lang: str = "fa") -> None:
     print(f"Processing dictionary file: {input_file}")
     print(f"Language pair: {source_lang} -> {target_lang}")
     try:
@@ -155,9 +147,7 @@ def process_dictionary_file(
         print(f"Error: Invalid JSON in file '{input_file}': {e}")
         sys.exit(1)
     print("Analyzing dictionary entries...")
-    transliterated, non_transliterated = separate_transliterated_words(
-        dictionary, source_lang, target_lang
-    )
+    transliterated, non_transliterated = separate_transliterated_words(dictionary, source_lang, target_lang)
     output_dir = input_file.parent
     base_name = input_file.stem
     transliterated_file = output_dir / f"{base_name}_transliterated.json"
@@ -175,12 +165,8 @@ def process_dictionary_file(
     print("SEPARATION COMPLETE")
     print("=" * 50)
     print(f"Total entries processed: {total_entries}")
-    print(
-        f"Transliterated entries: {translit_count} ({translit_count / total_entries * 100:.1f}%)"
-    )
-    print(
-        f"Native script entries: {native_count} ({native_count / total_entries * 100:.1f}%)"
-    )
+    print(f"Transliterated entries: {translit_count} ({translit_count / total_entries * 100:.1f}%)")
+    print(f"Native script entries: {native_count} ({native_count / total_entries * 100:.1f}%)")
     print("=" * 50)
 
 
@@ -196,16 +182,10 @@ def count_entries(data) -> int:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Separate transliterated words from a bilingual JSON dictionary"
-    )
+    parser = argparse.ArgumentParser(description="Separate transliterated words from a bilingual JSON dictionary")
     parser.add_argument("input_file", help="Input JSON dictionary file")
-    parser.add_argument(
-        "--source", default="en", help="Source language code (default: en)"
-    )
-    parser.add_argument(
-        "--target", default="fa", help="Target language code (default: fa)"
-    )
+    parser.add_argument("--source", default="en", help="Source language code (default: en)")
+    parser.add_argument("--target", default="fa", help="Target language code (default: fa)")
     args = parser.parse_args()
     input_file = Path(args.input_file)
     if not input_file.exists():

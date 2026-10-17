@@ -29,9 +29,7 @@ def process_file(json_file):
 
 def main():
     cwd = Path.cwd()
-    json_files = [
-        p for p in cwd.glob("*.json") if p.name != f"{cwd.name}.json"
-    ]  # avoid picking up our own output
+    json_files = [p for p in cwd.glob("*.json") if p.name != f"{cwd.name}.json"]  # avoid picking up our own output
 
     if not json_files:
         print("No JSON files found in the current directory.")

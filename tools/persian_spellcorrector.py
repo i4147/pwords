@@ -7,7 +7,6 @@ from collections import Counter
 
 
 class SpellCorrector:
-
     _NWORDS: Counter | None = None
 
     _ALPHABET = [
@@ -57,7 +56,6 @@ class SpellCorrector:
 
     _DICT_PATH = "serialized_dictionary.pkl"
     _CORPUS_PATH = "big.txt"
-
 
     @classmethod
     def _words(cls, text: str) -> list[str]:
@@ -118,7 +116,6 @@ class SpellCorrector:
             return True
         except ValueError:
             return False
-
 
     @classmethod
     def correct(cls, word: str) -> str | None:

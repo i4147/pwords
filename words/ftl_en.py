@@ -5,10 +5,13 @@ import re
 import multiprocessing as mp
 from pathlib import Path
 
-PERSIAN_RE = re.compile(r'^[\u0600-\u06FF\u0670-\u06D3\u200c\s\-\']+$')
-LATIN_RE = re.compile(r'^[A-Za-z0-9]+(?:[A-Za-z0-9\-\']*[A-Za-z0-9]+)?$')
-ROMAN_RE = re.compile(r'^(?=[mdclxvi]+$)m{0,4}(cm|cd|d?c{0,3})'
-                      r'(xc|xl|l?x{0,3})(ix|iv|v?i{0,3})$', re.I)
+PERSIAN_RE = re.compile(r"^[\u0600-\u06FF\u0670-\u06D3\u200c\s\-\']+$")
+LATIN_RE = re.compile(r"^[A-Za-z0-9]+(?:[A-Za-z0-9\-\']*[A-Za-z0-9]+)?$")
+ROMAN_RE = re.compile(
+    r"^(?=[mdclxvi]+$)m{0,4}(cm|cd|d?c{0,3})"
+    r"(xc|xl|l?x{0,3})(ix|iv|v?i{0,3})$",
+    re.I,
+)
 
 ROMAN_LIKE = {"i", "v", "x", "l", "c", "d", "m"}
 
@@ -53,9 +56,11 @@ PERSIAN_EQUIV = {
 
 ABBREVIATIONS = {"mgr", "comdr", "pvt", "ioctl", "stdio", "xor", "regex"}
 
+
 def normalize_fa(s: str) -> str:
     s = s.strip().lower()
-    return re.sub(r'[\u064b-\u065f\u0670]', '', s)
+    return re.sub(r"[\u064b-\u065f\u0670]", "", s)
+
 
 def is_known_nontranslatable(en: str) -> bool:
     e = en.strip()
@@ -66,11 +71,12 @@ def is_known_nontranslatable(en: str) -> bool:
         return True
     if len(e) <= 5 and e.isalpha() and e[:1].isupper() and e[1:].islower():
         return True
-    if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9&._-]*', e) and any(ch.isdigit() for ch in e):
+    if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9&._-]*", e) and any(ch.isdigit() for ch in e):
         return True
-    if re.fullmatch(r'[A-Z]{2,}', e):
+    if re.fullmatch(r"[A-Z]{2,}", e):
         return True
     return False
+
 
 def looks_transliterated(en: str, fa: str) -> bool:
     e = en.strip()
@@ -91,7 +97,7 @@ def looks_transliterated(en: str, fa: str) -> bool:
     while i < len(el):
         matched = False
         for n in (2, 1):
-            part = el[i:i+n]
+            part = el[i : i + n]
             if part in PERSIAN_EQUIV and any(x in f for x in PERSIAN_EQUIV[part]):
                 hit += n
                 i += n
@@ -107,14 +113,32 @@ def looks_transliterated(en: str, fa: str) -> bool:
     # Common phonetic spellings: English word copied into Persian script, often preserving sound more than meaning.
     compact = f.replace(" ", "")
     if len(compact) >= 3 and len(compact) <= len(el) + 3:
-        if compact.startswith(("ای", "ا", "بی", "سی", "دی", "جی", "کی", "ال", "ام", "ان", "او", "پی", "تی", "وی", "زد")):
+        if compact.startswith((
+            "ای",
+            "ا",
+            "بی",
+            "سی",
+            "دی",
+            "جی",
+            "کی",
+            "ال",
+            "ام",
+            "ان",
+            "او",
+            "پی",
+            "تی",
+            "وی",
+            "زد",
+        )):
             return True
 
     return False
 
+
 def worker(item):
     en, fa = item
     return (en, fa) if looks_transliterated(en, fa) else None
+
 
 def main():
     input_path = Path(sys.argv[1])
@@ -135,6 +159,7 @@ def main():
         json.dumps(cleaned, ensure_ascii=False, indent=2, sort_keys=True),
         encoding="utf-8",
     )
+
 
 if __name__ == "__main__":
     mp.freeze_support()

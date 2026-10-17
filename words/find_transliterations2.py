@@ -299,9 +299,7 @@ def main():
             transliterated_entries.append(item)
         else:
             valid_entries[item[0]] = item[1]
-    print(
-        f"Saving {len(transliterated_entries)} transliterated entries to {output_transliterated_path}"
-    )
+    print(f"Saving {len(transliterated_entries)} transliterated entries to {output_transliterated_path}")
     with output_transliterated_path.open("w", encoding="utf-8") as f:
         json.dump(dict(transliterated_entries), f, ensure_ascii=False, indent=4)
     print(f"Saving {len(valid_entries)} valid entries to {output_cleaned_path}")

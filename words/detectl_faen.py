@@ -23,10 +23,7 @@ try:
     from p2f import dictionary as p2f_dictionary
     from p2f import p2f_word
 except ImportError as exc:  # pragma: no cover
-    raise SystemExit(
-        "Could not import p2f. Install the package or run this script from "
-        "the project root."
-    ) from exc
+    raise SystemExit("Could not import p2f. Install the package or run this script from the project root.") from exc
 
 
 # Arabic/Persian presentation differences should not prevent a match.
@@ -39,15 +36,11 @@ def canonical(value: str) -> str:
     return _TRANSLIT_RE.sub("", value)
 
 
-def candidate_transliterations(
-    persian: str, *, max_word_size: int = 15, cutoff: int = 50
-) -> set[str]:
+def candidate_transliterations(persian: str, *, max_word_size: int = 15, cutoff: int = 50) -> set[str]:
     """Get all likely Finglish spellings for a Persian key."""
     candidates = {
         canonical(candidate)
-        for candidate, _score in p2f_word(
-            persian, max_word_size=max_word_size, cutoff=cutoff
-        )
+        for candidate, _score in p2f_word(persian, max_word_size=max_word_size, cutoff=cutoff)
         if candidate
     }
 
@@ -78,15 +71,11 @@ def is_transliteration(
     else:
         return False
 
-    candidates = candidate_transliterations(
-        persian, max_word_size=max_word_size, cutoff=cutoff
-    )
+    candidates = candidate_transliterations(persian, max_word_size=max_word_size, cutoff=cutoff)
     return any(canonical(value) in candidates for value in values)
 
 
-def detect(
-    data: dict[str, Any], *, max_word_size: int = 15, cutoff: int = 50
-) -> tuple[dict[str, Any], dict[str, Any]]:
+def detect(data: dict[str, Any], *, max_word_size: int = 15, cutoff: int = 50) -> tuple[dict[str, Any], dict[str, Any]]:
     """Split an object mapping into (normal_entries, transliterated_entries)."""
     normal: dict[str, Any] = {}
     transliterated: dict[str, Any] = {}
@@ -94,9 +83,7 @@ def detect(
     for persian, value in data.items():
         if not isinstance(persian, str):
             normal[persian] = value
-        elif is_transliteration(
-            persian, value, max_word_size=max_word_size, cutoff=cutoff
-        ):
+        elif is_transliteration(persian, value, max_word_size=max_word_size, cutoff=cutoff):
             transliterated[persian] = value
         else:
             normal[persian] = value
@@ -105,9 +92,7 @@ def detect(
 
 
 def write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -116,24 +101,32 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("input", type=Path, help="Input JSON object")
     parser.add_argument(
-        "-o", "--output", type=Path,
+        "-o",
+        "--output",
+        type=Path,
         help="Output JSON for the non-transliterated dictionary (default: stdout)",
     )
     parser.add_argument(
-        "-m", "--move", action="store_true",
+        "-m",
+        "--move",
+        action="store_true",
         help="Write detected entries to a separate JSON file and remove them from the output",
     )
     parser.add_argument(
-        "--moved-output", type=Path,
+        "--moved-output",
+        type=Path,
         help="Path for moved entries (default: <input>.transliterated.json)",
     )
     parser.add_argument(
-        "--in-place", action="store_true",
+        "--in-place",
+        action="store_true",
         help="With --move, replace the input file with the filtered dictionary",
     )
     parser.add_argument("--max-word-size", type=int, default=15)
     parser.add_argument(
-        "--cutoff", type=int, default=50,
+        "--cutoff",
+        type=int,
+        default=50,
         help="Number of p2f alternatives checked per Persian key (default: 50)",
     )
     return parser
@@ -152,14 +145,10 @@ def main(argv: list[str] | None = None) -> int:
     if not isinstance(data, dict):
         raise SystemExit("input JSON must be an object mapping Persian words to values")
 
-    normal, moved = detect(
-        data, max_word_size=args.max_word_size, cutoff=args.cutoff
-    )
+    normal, moved = detect(data, max_word_size=args.max_word_size, cutoff=args.cutoff)
 
     if args.move:
-        moved_path = args.moved_output or args.input.with_name(
-            args.input.stem + ".transliterated.json"
-        )
+        moved_path = args.moved_output or args.input.with_name(args.input.stem + ".transliterated.json")
         write_json(moved_path, moved)
         output_data = normal
         if args.in_place:

@@ -45,20 +45,20 @@ def normalize_persian(text: str) -> str:
     return text
 
 
-if __name__=='__main__':
+if __name__ == "__main__":
     fn = sys.argv[1]
-    with open(fn,encoding='utf-8') as f:
-        data=json.load(f)
-    cleaned={}
-    changed={}
-    for k,v in data.items():
-        new_k=normalize_persian(k)
-        if new_k!=k:
-            print(f'{k}  {new_k}')
-            changed[new_k]=v
+    with open(fn, encoding="utf-8") as f:
+        data = json.load(f)
+    cleaned = {}
+    changed = {}
+    for k, v in data.items():
+        new_k = normalize_persian(k)
+        if new_k != k:
+            print(f"{k}  {new_k}")
+            changed[new_k] = v
         else:
-            cleaned[new_k]=v
-    with open(fn,'w',encoding='utf-8') as fo:
-        json.dump(cleaned,fo,ensure_ascii=False,indent=2)
-    with open('changed.json',encoding='utf-8') as fc:
-        json.dump(changed,fc,ensure_ascii=False,indent=2)
+            cleaned[new_k] = v
+    with open(fn, "w", encoding="utf-8") as fo:
+        json.dump(cleaned, fo, ensure_ascii=False, indent=2)
+    with open("changed.json", encoding="utf-8") as fc:
+        json.dump(changed, fc, ensure_ascii=False, indent=2)

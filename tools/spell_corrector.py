@@ -17,7 +17,6 @@ class SpellCorrector:
     _DICT_PATH = "serialized_dictionary.pkl"
     _CORPUS_PATH = "/data/data/com.termux/files/home/nltk_data/corpora/words/en"
 
-
     @classmethod
     def _words(cls, text: str) -> list[str]:
         return cls._WORD_PATTERN.findall(text.lower())
@@ -77,7 +76,6 @@ class SpellCorrector:
             return True
         except ValueError:
             return False
-
 
     @classmethod
     def correct(cls, word: str) -> str | None:

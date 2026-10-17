@@ -5,7 +5,7 @@ import sys
 input_file = sys.argv[1]
 
 # Read the JSON file
-with open(input_file, 'r', encoding='utf-8') as f:
+with open(input_file, "r", encoding="utf-8") as f:
     data = json.load(f)
 
 # Separate valid and failed records
@@ -21,12 +21,12 @@ for key, value in data.items():
         valid_records[key] = value
 
 # Write valid records back to the original file
-with open(input_file, 'w', encoding='utf-8') as f:
+with open(input_file, "w", encoding="utf-8") as f:
     json.dump(valid_records, f, ensure_ascii=False, indent=2)
 
 # Write failed records to failed.json
-failed_file = input_file.replace('.json', '_failed.json')
-with open(failed_file, 'w', encoding='utf-8') as f:
+failed_file = input_file.replace(".json", "_failed.json")
+with open(failed_file, "w", encoding="utf-8") as f:
     json.dump(failed_records, f, ensure_ascii=False, indent=2)
 
 print(f"Valid records: {len(valid_records)}")

@@ -12,7 +12,6 @@ from typing import Dict, Tuple
 
 
 class TransliterationDetector:
-
     def __init__(self):
         self.persian_to_english_map = {
             "ا": ["a", "ā", "â", "aa", "e"],

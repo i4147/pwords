@@ -10,24 +10,85 @@ import unicodedata
 from pathlib import Path
 
 PERSIAN_TO_LATIN = {
-    "ا": "a", "آ": "a", "ب": "b", "پ": "p", "ت": "t", "ث": "s", "ج": "j",
-    "چ": "ch", "ح": "h", "خ": "kh", "د": "d", "ذ": "z", "ر": "r", "ز": "z",
-    "ژ": "zh", "س": "s", "ش": "sh", "ص": "s", "ض": "z", "ط": "t", "ظ": "z",
-    "ع": "", "غ": "gh", "ف": "f", "ق": "gh", "ک": "k", "ك": "k", "گ": "g",
-    "ل": "l", "م": "m", "ن": "n", "و": "v", "ه": "h", "ی": "y", "ی": "y",
-    "ء": "", "ؤ": "u", "ئ": "y", "ۀ": "e", "ة": "e",
-    "‌": "", "ً": "", "ٌ": "", "ٍ": "", "َ": "", "ُ": "", "ِ": "", "ْ": "",
-    "ٓ": "", "ٰ": "",
+    "ا": "a",
+    "آ": "a",
+    "ب": "b",
+    "پ": "p",
+    "ت": "t",
+    "ث": "s",
+    "ج": "j",
+    "چ": "ch",
+    "ح": "h",
+    "خ": "kh",
+    "د": "d",
+    "ذ": "z",
+    "ر": "r",
+    "ز": "z",
+    "ژ": "zh",
+    "س": "s",
+    "ش": "sh",
+    "ص": "s",
+    "ض": "z",
+    "ط": "t",
+    "ظ": "z",
+    "ع": "",
+    "غ": "gh",
+    "ف": "f",
+    "ق": "gh",
+    "ک": "k",
+    "ك": "k",
+    "گ": "g",
+    "ل": "l",
+    "م": "m",
+    "ن": "n",
+    "و": "v",
+    "ه": "h",
+    "ی": "y",
+    "ی": "y",
+    "ء": "",
+    "ؤ": "u",
+    "ئ": "y",
+    "ۀ": "e",
+    "ة": "e",
+    "‌": "",
+    "ً": "",
+    "ٌ": "",
+    "ٍ": "",
+    "َ": "",
+    "ُ": "",
+    "ِ": "",
+    "ْ": "",
+    "ٓ": "",
+    "ٰ": "",
 }
 
 VOWEL_MARKS = set("aeiouy")
 LATIN_KEEP = re.compile(r"[a-z]+")
 
 COMMON_TECH = {
-    "api", "ip", "ui", "id", "usb", "json", "xml", "html", "css", "sql",
-    "cpu", "ram", "api", "sdk", "http", "https", "tcp", "udp", "git", "dns",
+    "api",
+    "ip",
+    "ui",
+    "id",
+    "usb",
+    "json",
+    "xml",
+    "html",
+    "css",
+    "sql",
+    "cpu",
+    "ram",
+    "api",
+    "sdk",
+    "http",
+    "https",
+    "tcp",
+    "udp",
+    "git",
+    "dns",
 }
 COMMON_ABBREV_RE = re.compile(r"^[A-Z0-9][A-Z0-9\-.]{1,}$")
+
 
 def normalize_fa(s: str) -> str:
     s = unicodedata.normalize("NFKC", s)
@@ -36,11 +97,13 @@ def normalize_fa(s: str) -> str:
     s = s.replace("‌", "")
     return s.strip()
 
+
 def normalize_en(s: str) -> str:
     s = unicodedata.normalize("NFKC", s).lower().strip()
     s = s.replace("’", "'").replace("ʼ", "").replace("ʿ", "").replace("ʾ", "")
     s = re.sub(r"[^a-z]+", "", s)
     return s
+
 
 def persian_to_ascii(word: str) -> str:
     out = []
@@ -50,6 +113,7 @@ def persian_to_ascii(word: str) -> str:
     s = re.sub(r"(.)\1+", r"\1", s)
     return s
 
+
 def simplify(s: str) -> str:
     s = normalize_en(s)
     s = s.replace("ph", "f").replace("kh", "x").replace("gh", "g")
@@ -58,6 +122,7 @@ def simplify(s: str) -> str:
     s = re.sub(r"[aeiouy]", "", s)
     s = re.sub(r"(.)\1+", r"\1", s)
     return s
+
 
 def is_likely_transliteration(item):
     p, e = item
@@ -87,6 +152,7 @@ def is_likely_transliteration(item):
     ratio = 0
     try:
         import difflib
+
         ratio = difflib.SequenceMatcher(None, sp, se).ratio()
     except Exception:
         ratio = 0
@@ -94,7 +160,7 @@ def is_likely_transliteration(item):
     common = len(set(sp) & set(se))
     vowel_ok = abs(sum(c in VOWEL_MARKS for c in target) - sum(c in VOWEL_MARKS for c in en)) <= 2
 
-    likely = (ratio >= 0.78 and common >= max(2, min(len(sp), len(se)) // 2) and vowel_ok)
+    likely = ratio >= 0.78 and common >= max(2, min(len(sp), len(se)) // 2) and vowel_ok
     if likely:
         return True, item
 
@@ -103,11 +169,13 @@ def is_likely_transliteration(item):
 
     return False, item
 
+
 def load_input(path: Path):
     with path.open("rb") as f:
         with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
             data = mm.read().decode("utf-8")
     return json.loads(data)
+
 
 def main():
     inp = Path(sys.argv[1])
@@ -142,6 +210,7 @@ def main():
         json.dumps(cleaned, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
 
 if __name__ == "__main__":
     main()

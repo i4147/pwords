@@ -12,6 +12,7 @@ Usage:
                                                      # transliterated_faen.json (or _enfa.json),
                                                      # original file updated in place
 """
+
 from __future__ import annotations
 
 import argparse
@@ -45,9 +46,8 @@ VOWELS = set("aeiou")
 # normalisation
 # --------------------------------------------------------------------------
 def norm_fa(s: str) -> str:
-    s = (s.replace("ي", "ی").replace("ك", "ک").replace("ۀ", "ه")
-          .replace("ة", "ه").replace("إ", "ا"))
-    return re.sub("[\u064B-\u065F\u0670\u0640\u200c\u200d\u200e\u200f]", "", s)
+    s = s.replace("ي", "ی").replace("ك", "ک").replace("ۀ", "ه").replace("ة", "ه").replace("إ", "ا")
+    return re.sub("[\u064b-\u065f\u0670\u0640\u200c\u200d\u200e\u200f]", "", s)
 
 
 def canon(s: str) -> str:
@@ -94,7 +94,7 @@ def table_match(fa: str, en_variants_set: set[str], strict: bool) -> bool:
     n = len(fa)
 
     def options(i: int, k: int):
-        tok = fa[i:i + k]
+        tok = fa[i : i + k]
         table = P_BEGIN if i == 0 else (P_END if i + k == n else P_MIDDLE)
         opts = table.get(tok)
         if opts is None and k == 1:
@@ -206,14 +206,20 @@ def write_json_atomic(path: str, obj) -> None:
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("file", help="bilingual fa-en or en-fa JSON dictionary")
-    ap.add_argument("-m", "--move", action="store_true",
-                    help="move found entries to transliterated_<faen|enfa>.json "
-                         "(removed from the original file, which is updated in place)")
-    ap.add_argument("--strict", action="store_true",
-                    help="do not allow skipping unwritten short vowels (fewer hits, fewer false positives)")
+    ap.add_argument(
+        "-m",
+        "--move",
+        action="store_true",
+        help="move found entries to transliterated_<faen|enfa>.json "
+        "(removed from the original file, which is updated in place)",
+    )
+    ap.add_argument(
+        "--strict",
+        action="store_true",
+        help="do not allow skipping unwritten short vowels (fewer hits, fewer false positives)",
+    )
     ap.add_argument("-q", "--quiet", action="store_true", help="do not list every hit")
     args = ap.parse_args(argv)
 
@@ -230,8 +236,7 @@ def main(argv=None) -> int:
     print(f"{len(found)} transliterated of {len(data)} entries ({direction})", file=sys.stderr)
 
     if args.move and found:
-        out = os.path.join(os.path.dirname(os.path.abspath(args.file)),
-                           f"transliterated_{direction}.json")
+        out = os.path.join(os.path.dirname(os.path.abspath(args.file)), f"transliterated_{direction}.json")
         existing = {}
         if os.path.exists(out):
             with open(out, encoding="utf-8") as f:

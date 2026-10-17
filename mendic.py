@@ -24,13 +24,8 @@ def check_file_format(data):
     sample_keys = list(data.keys())[:5]
     sample_values = list(data.values())[:5]
     english_keys = sum(1 for k in sample_keys if is_english_word(k))
-    persian_values = sum(
-        1 for v in sample_values if isinstance(v, str) and is_persian_word(v)
-    )
-    is_correct = (
-        english_keys >= len(sample_keys) * 0.5
-        and persian_values >= len(sample_values) * 0.5
-    )
+    persian_values = sum(1 for v in sample_values if isinstance(v, str) and is_persian_word(v))
+    is_correct = english_keys >= len(sample_keys) * 0.5 and persian_values >= len(sample_values) * 0.5
     return is_correct, sample_keys, sample_values
 
 
@@ -57,9 +52,7 @@ def merge_json_files(directory=".", output_file="enfa.json"):
                 continue
             is_correct_format, sample_keys, sample_values = check_file_format(data)
             if not is_correct_format:
-                print(
-                    f"❌ Skipping {json_file.name}: Wrong format (Persian keys detected)"
-                )
+                print(f"❌ Skipping {json_file.name}: Wrong format (Persian keys detected)")
                 print(f"   Sample keys: {sample_keys}")
                 print(f"   Sample values: {sample_values}")
                 skipped_files.append((json_file.name, "Wrong format (Persian keys)"))
@@ -75,13 +68,11 @@ def merge_json_files(directory=".", output_file="enfa.json"):
                 if english_word in merged_data:
                     if english_word not in duplicate_keys:
                         duplicate_keys[english_word] = []
-                    duplicate_keys[english_word].append(
-                        {
-                            "existing": merged_data[english_word],
-                            "duplicate": persian_translation,
-                            "file": json_file.name,
-                        }
-                    )
+                    duplicate_keys[english_word].append({
+                        "existing": merged_data[english_word],
+                        "duplicate": persian_translation,
+                        "file": json_file.name,
+                    })
                 else:
                     merged_data[english_word] = persian_translation
             json_file.unlink()

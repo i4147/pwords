@@ -3,19 +3,18 @@ import re
 from pathlib import Path
 from collections import defaultdict
 
+
 def normalize_source(filename: str) -> str:
     """Turn 'essential-english-words-2' into 'essential-english-words' and strip trailing -N."""
     stem = Path(filename).stem
     # remove trailing -<digits>
     return re.sub(r"-\d+$", "", stem)
 
+
 def main():
     current_dir = Path.cwd()
     merged = defaultdict(list)
-    json_files = [
-        f for f in current_dir.glob("*.json")
-        if f.name != "merged.json"
-    ]
+    json_files = [f for f in current_dir.glob("*.json") if f.name != "merged.json"]
 
     if not json_files:
         print("No JSON files found to merge.")

@@ -10,13 +10,15 @@ LEVELS = [
     ("lab2.pkl", "level2_country"),
     ("lab3.pkl", "level3_practice"),
 ]
-OUT_JSON     = "labels_merged.json"
-OUT_TXT_DIR  = "labels_by_level"   # one .txt per level, grouped by category
-KEEP_STRIPPED = False              # set True to also include lab*s.pkl variants
+OUT_JSON = "labels_merged.json"
+OUT_TXT_DIR = "labels_by_level"  # one .txt per level, grouped by category
+KEEP_STRIPPED = False  # set True to also include lab*s.pkl variants
+
 
 def load_col(path, name):
-    s = pd.read_pickle(path).iloc[:, 0]        # take the single column
+    s = pd.read_pickle(path).iloc[:, 0]  # take the single column
     return s.rename(name)
+
 
 def main():
     frames = []
@@ -78,6 +80,7 @@ def main():
             print(f"✓ {grp_file} ({len(grouped)} groups)")
 
         print(f"✓ {flat} ({len(vals)} unique)")
+
 
 if __name__ == "__main__":
     main()

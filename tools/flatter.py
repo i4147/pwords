@@ -6,7 +6,7 @@ OUTPUT_TXT = "values.txt"
 
 
 def main():
-    with open(INPUT_JSON, 'r', encoding='utf-8') as f:
+    with open(INPUT_JSON, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     # Collect values from each record. Handles:
@@ -37,7 +37,7 @@ def main():
         seen.add(v)
         cleaned.append(v)
 
-    with open(OUTPUT_TXT, 'w', encoding='utf-8') as f:
+    with open(OUTPUT_TXT, "w", encoding="utf-8") as f:
         f.write("\n".join(cleaned))
         if cleaned:
             f.write("\n")

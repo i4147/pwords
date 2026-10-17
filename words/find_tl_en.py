@@ -204,9 +204,7 @@ def is_transliteration(english_word, persian_text):
         translit_indicators.append("tion_sound")
     if "ph" in eng_normalized and "ف" in persian_normalized:
         translit_indicators.append("ph_sound")
-    if "th" in eng_normalized and (
-        "ت" in persian_normalized or "ث" in persian_normalized
-    ):
+    if "th" in eng_normalized and ("ت" in persian_normalized or "ث" in persian_normalized):
         translit_indicators.append("th_sound")
     eng_letters = len([c for c in eng_normalized if c.isalpha()])
     persian_letters = len([c for c in persian_normalized if c in PERSIAN_CHARS])
@@ -216,11 +214,7 @@ def is_transliteration(english_word, persian_text):
         translit_indicators.append("no_persian_specific_chars")
     eng_vowels = re.findall(r"[aeiou]+", eng_normalized)
     persian_vowels = re.findall(r"[اوی]", persian_normalized)
-    if (
-        len(eng_vowels) > 0
-        and len(persian_vowels) > 0
-        and abs(len(eng_vowels) - len(persian_vowels)) <= 1
-    ):
+    if len(eng_vowels) > 0 and len(persian_vowels) > 0 and abs(len(eng_vowels) - len(persian_vowels)) <= 1:
         translit_indicators.append("vowel_pattern")
     consonant_map = {
         "k": "ک",
@@ -314,9 +308,7 @@ def main():
     print(f"RESULTS:")
     print(f"{'=' * 40}")
     print(f"Total entries processed: {len(data)}")
-    print(
-        f"Transliterated entries: {len(transliterated)} ({len(transliterated) / len(data) * 40:.1f}%)"
-    )
+    print(f"Transliterated entries: {len(transliterated)} ({len(transliterated) / len(data) * 40:.1f}%)")
     print(f"Cleaned entries: {len(cleaned)} ({len(cleaned) / len(data) * 40:.1f}%)")
     print(f"{'=' * 40}")
     if transliterated:

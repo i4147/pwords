@@ -208,9 +208,7 @@ class TransliterationDetector:
         ]
         if len(translation) < 3 and len(persian_word) < 4:
             return True
-        marker_count = sum(
-            1 for marker in transliteration_markers if marker in translation
-        )
+        marker_count = sum(1 for marker in transliteration_markers if marker in translation)
         if marker_count >= 2:
             return True
         if translation.islower() and len(translation) > 3:
@@ -254,10 +252,7 @@ class TransliterationDetector:
         expected = self.generate_transliteration(persian_word)
         if not expected:
             return 0.0
-        return 1 - (
-            self.levenshtein_distance(expected, translation)
-            / max(len(expected), len(translation))
-        )
+        return 1 - (self.levenshtein_distance(expected, translation) / max(len(expected), len(translation)))
 
     def generate_transliteration(self, persian_word: str) -> str:
         result = []
@@ -340,9 +335,7 @@ def main():
     cleaned_path = output_dir / "cleaned.json"
     print("\nResults:")
     print(f"  Total pairs: {len(data)}")
-    print(
-        f"  Transliterated: {len(transliterated)} ({len(transliterated) / len(data) * 40:.1f}%)"
-    )
+    print(f"  Transliterated: {len(transliterated)} ({len(transliterated) / len(data) * 40:.1f}%)")
     print(f"  Cleaned: {len(cleaned)} ({len(cleaned) / len(data) * 40:.1f}%)")
     with open(transliterated_path, "w", encoding="utf-8") as f:
         json.dump(transliterated, f, ensure_ascii=False, indent=2)
